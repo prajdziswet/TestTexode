@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServerTest.Models;
 using System.Diagnostics;
+using ServerTest.Servises;
 
 namespace ServerTest.Controllers
 {
@@ -15,6 +16,7 @@ namespace ServerTest.Controllers
 
         public IActionResult Index()
         {
+            MyCurrency s = Nbrb.GetJson_USD(new DateOnly(2022, 1, 6)).Result;
             return View();
         }
 
