@@ -8,11 +8,15 @@ public class BitCoin
     private static string API_KEY = "07ab11f5-5862-4ec2-9961-f41e3c3c3e55";
     public static string makeAPICall()
     {
-        var URL = new UriBuilder("https://coinmarketcap.com/converter/");
+        var URL = new UriBuilder("https://sandbox-api.coinmarketcap.com/v2/tools/price-conversion/");
 
         var queryString = HttpUtility.ParseQueryString(string.Empty);
+        queryString["id"] = "1";
         queryString["convert_id"] = "1,278";
         queryString["time"] = "2022-11-17T10:13:46.701Z";
+        //queryString["convert"] = "USD";
+        //queryString["start"] = "1";
+        //queryString["limit"] = "5000";
         //queryString["convert"] = "USD";
 
         URL.Query = queryString.ToString();

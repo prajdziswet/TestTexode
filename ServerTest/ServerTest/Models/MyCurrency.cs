@@ -4,8 +4,8 @@ namespace ServerTest.Models;
 
 public class MyCurrency
 {
-    //[Key]
-    //public int ID { get; set; }
+    [Key]
+    public int ID { get; set; }
     public string Currency { get; set; }
     public DateOnly Date { get; set; }
     public decimal? Value { get; set; }

@@ -16,7 +16,7 @@ namespace ServerTest.Controllers
 
         public IActionResult Index()
         {
-            MyCurrency s = Nbrb.GetJson_USD(new DateOnly(2022, 1, 6)).Result;
+            string s=BitCoin.makeAPICall();
             return View();
         }
 
