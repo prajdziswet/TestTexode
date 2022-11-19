@@ -2,6 +2,8 @@
 using ServerTest.Models;
 using System.Diagnostics;
 using ServerTest.Servises;
+using System.Xml.Linq;
+using System.Globalization;
 
 namespace ServerTest.Controllers
 {
@@ -16,7 +18,15 @@ namespace ServerTest.Controllers
 
         public IActionResult Index()
         {
-            string s=BitCoin.makeAPICall();
+            DateOnly date1=AddOrGetInDB.ParseDate("2022-11-17");
+            DateOnly date2 = AddOrGetInDB.ParseDate("2022-11-17");
+            List<MyCurrency> list = BitCoin.getListMyCurrencies(date1, date2);
+            date2 = AddOrGetInDB.ParseDate("2022-11-18");
+            list = BitCoin.getListMyCurrencies(date1, date2);
+            date2 = AddOrGetInDB.ParseDate("2022-11-19");
+            list = BitCoin.getListMyCurrencies(date1, date2);
+            date1 = AddOrGetInDB.ParseDate("2022-11-19");
+            list = BitCoin.getListMyCurrencies(date1, date2);
             return View();
         }
 

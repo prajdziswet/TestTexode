@@ -16,6 +16,14 @@ public class MyCurrency
 
     }
 
+    public MyCurrency(string currency, DateOnly date, decimal? value, int amount)
+    {
+        Currency = currency;
+        Date = date;
+        Value = value;
+        Amount = amount;
+    }
+
     public MyCurrency(Rate currency)
     {
         Currency = currency.Cur_Abbreviation;

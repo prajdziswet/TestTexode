@@ -6,11 +6,11 @@ public class KeyObj
     public string dateFinish { get; private set; }
     public string CurrencyName { get; private set; }
 
-    public KeyObj(string dateFirst, string dateFinish, string currencyName="USD")
+    public KeyObj(string dateFirst, string dateFinish, string currencyName)
     {
         this.dateFirst = dateFirst;
         this.dateFinish = dateFinish;
-        CurrencyName = currencyName;
+        CurrencyName = currencyName.ToUpper();
     }
 
     public static bool operator ==(KeyObj left, KeyObj right)

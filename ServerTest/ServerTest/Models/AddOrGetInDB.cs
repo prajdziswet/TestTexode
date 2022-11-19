@@ -6,13 +6,10 @@ namespace ServerTest.Models;
 
 public class AddOrGetInDB
 {
-    //private static AppContext _context=new AppContext();
-
     public List<MyCurrency> GetCurrencies(KeyObj key)
     {
         using (AppContext _context = new AppContext())
         {
-            if (key.dateFinish == null || key.dateFinish == key.dateFirst) return new List<MyCurrency>() { GetCurrency(key.dateFirst, key.CurrencyName) };
 
             DateOnly date1 = ParseDate(key.dateFirst);
             DateOnly date2 = ParseDate(key.dateFinish);
@@ -31,8 +28,12 @@ public class AddOrGetInDB
             if (dates.Length == 0) return inDateBase;
             else
             {
-                List<MyCurrency> notInList = Nbrb.GetCurrencyDays(date1, date2, key.CurrencyName);
-
+                List<MyCurrency> notInList;
+                if (key.CurrencyName == "BTC") notInList = BitCoin.getListMyCurrencies(date1, date2);
+                else
+                {
+                    notInList = Nbrb.getListMyCurrencies(date1, date2, key.CurrencyName);
+                }
                 _context.currencies.AddRangeAsync(notInList);
                 _context.SaveChangesAsync();
 
@@ -47,26 +48,7 @@ public class AddOrGetInDB
 
     }
 
-    private static MyCurrency GetCurrency(String Date, String CurrencyName)
-    {
-        using (AppContext _context = new AppContext())
-        {
-            DateOnly date = ParseDate(Date);
-
-            MyCurrency currency = _context.currencies.FirstOrDefault(x => x.Currency == CurrencyName && x.Date == date);
-
-            if (currency != null) return currency;
-            else
-            {
-                MyCurrency myCurrency = Nbrb.GetCurrency(date, CurrencyName).Result;
-                _context.currencies.Add(myCurrency);
-                _context.SaveChangesAsync();
-                return myCurrency;
-            } 
-        }
-    }
-
-    private static DateOnly ParseDate(string dateStr)
+    public static DateOnly ParseDate(string dateStr)
     {
         DateOnly date;
 
@@ -77,7 +59,7 @@ public class AddOrGetInDB
             if (datenumberstr.Length != 3) throw new Exception("Неверна введена дата");
             else
             {
-                int year = (int)datenumberstr.Max(x => x.Length);
+                int year = Convert.ToInt16(datenumberstr.FirstOrDefault(x => x.Length==4));
                 if (year < 1991) throw new Exception("Неверна введена дата, не создан НБРБ");
                 if (datenumberstr.Select((item, index) => new { Index = index, Length = item.Length })
                     .FirstOrDefault(x => x.Length == 4)?.Index==3)

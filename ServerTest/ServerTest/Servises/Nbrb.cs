@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Net;
 using ServerTest.Models;
 
@@ -10,35 +11,26 @@ public class Nbrb
     static HttpClient httpClient=new HttpClient();
     private static string adress = "https://www.nbrb.by/api/exrates/";
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="date"></param>
-    /// <param name="currency">USD,EUR,RUB</param>
-    /// <returns></returns>
-    public static async Task<MyCurrency> GetCurrency(DateOnly? date = null,string currency="USD")
+    public static List<MyCurrency> getListMyCurrencies(DateOnly dateStart, DateOnly dateFinish,string currencyName)
+    {
+        if (dateStart == dateFinish)
+        {
+            return new List<MyCurrency>() { GetCurrency(dateStart, currencyName).Result };
+        }
+        else
+        {
+            return GetCurrencyDays(dateStart, dateFinish, currencyName);
+        }
+        
+    }
+
+    private static async Task<MyCurrency> GetCurrency(DateOnly date,string currency="USD")
     {
         String ondate = null,rate;
 
-        //switch (currency)
-        //{
-        //    case "RUB":
-        //        if (date == null || date > new DateOnly(2021, 12, 31)) rate = "456";
-        //        else rate = "298";
-        //        break;
-        //    case "EUR": rate = "451"; break;
-        //    default:
-        //        if (date == null|| date>new DateOnly(2021,12,31)) rate = "431";
-        //        else rate = "145"; break;
-        //}
+            ondate = date.ToString("yyyy-MM-dd");
 
-        if (date.HasValue)
-        {
-            ondate = date.Value.ToString("yyyy-MM-dd");
-        }
-
-        //using var response = await httpClient.GetAsync(adress + $"rates?{((ondate == null) ? "" : "?ondate=" + ondate)}");
-        using var response = await httpClient.GetAsync(adress + $"rates?ondate={ondate}&periodicity=0");
+            using var response = await httpClient.GetAsync(adress + $"rates?ondate={ondate}&periodicity=0");
 
         Rate[] rateclass=null;
         if (response.StatusCode == HttpStatusCode.OK)
@@ -52,7 +44,7 @@ public class Nbrb
         }
     }
 
-    public static List<MyCurrency> GetCurrencyDays(DateOnly datestart, DateOnly datefinsh, string currency = "USD")
+    private static List<MyCurrency> GetCurrencyDays(DateOnly datestart, DateOnly datefinsh, string currency = "USD")
     {
         String rate;
 
@@ -73,19 +65,5 @@ public class Nbrb
 
         return listCurrencies;
 
-
-        //using var response = await httpClient.GetAsync(adress + $"Rates/Dynamics/{rate}?startDate={datestart.ToString("yyyy-MM-dd")}&endDate={datefinsh.ToString("yyyy-MM-dd")}");
-
-        //Rate[] rateclass = null;
-        //if (response.StatusCode == HttpStatusCode.OK)
-        //{
-        //    rateclass = await response.Content.ReadFromJsonAsync<Rate[]>();
-        //}
-
-        //if (rateclass == null) return null;
-        //else
-        //{
-        //    return rateclass.Select(x=>new MyCurrency(x)).ToList();
-        //}
     }
 }

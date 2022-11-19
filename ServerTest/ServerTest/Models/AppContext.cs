@@ -4,7 +4,7 @@ namespace ServerTest.Models;
 
 public class AppContext:DbContext
 {
-    public DbSet<MyCurrency> currencies;
+    public DbSet<MyCurrency> currencies { get; set; }
 
     public AppContext() => Database.EnsureCreated();
 
