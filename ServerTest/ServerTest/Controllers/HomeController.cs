@@ -18,15 +18,10 @@ namespace ServerTest.Controllers
 
         public IActionResult Index()
         {
-            DateOnly date1=AddOrGetInDB.ParseDate("2022-11-17");
-            DateOnly date2 = AddOrGetInDB.ParseDate("2022-11-17");
-            List<MyCurrency> list = BitCoin.getListMyCurrencies(date1, date2);
-            date2 = AddOrGetInDB.ParseDate("2022-11-18");
-            list = BitCoin.getListMyCurrencies(date1, date2);
-            date2 = AddOrGetInDB.ParseDate("2022-11-19");
-            list = BitCoin.getListMyCurrencies(date1, date2);
-            date1 = AddOrGetInDB.ParseDate("2022-11-19");
-            list = BitCoin.getListMyCurrencies(date1, date2);
+
+            AddOrGetInDB ind= new AddOrGetInDB();
+            KeyObj key = new KeyObj("2022-11-15", "2022-11-17", "USD");
+            List<MyCurrency> list = ind.GetCurrencies(key);
             return View();
         }
 
