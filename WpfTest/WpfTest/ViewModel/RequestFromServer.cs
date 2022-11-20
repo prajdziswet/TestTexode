@@ -9,11 +9,16 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows.Threading;
+using System.Windows;
+using System;
+using static WpfTest.RequestFromServer;
 
 namespace WpfTest
 {
-    public class RequestFromServer 
+    public class RequestFromServer : INotifyPropertyChanged
     {
+        #region last
         public List<MyCurrency> listCurrency { get; private set; }
 
         static HttpClient httpClient = new HttpClient();
@@ -65,8 +70,9 @@ namespace WpfTest
             {
                 s_cts.Dispose();
                 s_cts = null;
+                ReturnRezult?.Invoke();
             }
-            ReturnRezult?.Invoke();
+            
         }
 
         public void MakeRequest(KeyObj key)
@@ -86,6 +92,29 @@ namespace WpfTest
             httpClient.Dispose();
         }
 
+        #endregion
 
+        #region NameButton
+        private string _NameButton = "Запустить";
+
+        public string NameButton
+        {
+            get => _NameButton;
+            set
+            {
+                _NameButton = value;
+                OnPropertyChanged("NameButton");
+            }
+        }
+
+
+        #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
     }
 }

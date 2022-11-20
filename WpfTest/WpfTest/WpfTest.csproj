@@ -92,7 +92,6 @@
     </ApplicationDefinition>
     <Compile Include="Model\MyCurrency.cs" />
     <Compile Include="ViewModel\RequestFromServer.cs" />
-    <Compile Include="ViewModel\Tuning.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

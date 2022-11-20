@@ -26,7 +26,7 @@ namespace WpfTest
     {
         private KeyObj keyObj;
         private RequestFromServer requestFromServer;
-        private DispatcherTimer timer=null;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -34,9 +34,10 @@ namespace WpfTest
             RequestFromServer.ReturnRezult += DrawGraficInvoke;
             requestFromServer = new RequestFromServer();
             DataContext = keyObj;
+            button1.DataContext = requestFromServer;
         }
 
-        #region bad MVVM patern
+        #region wrong for MVVM patern
         private void DrawGraficInvoke()
         {
             Dispatcher.Invoke(DrawGrafic);
@@ -44,11 +45,10 @@ namespace WpfTest
 
         private void DrawGrafic()
         {
-            timerStop();
             chart.ChartAreas.Clear();
             List<MyCurrency> list = requestFromServer.listCurrency;
 
-            if (list.Count > 1)
+            if (list?.Count > 1)
             {
                 list = list.OrderBy(x => x.Date).ToList();
                 //Все графики находятся в пределах области построения ChartArea, создадим ее
@@ -75,7 +75,7 @@ namespace WpfTest
                 List<decimal> axisYData = list.Select(x=>x.Value).ToList();
                 chart.Series["Series1"].Points.DataBindXY(axisXData, axisYData);
             }
-            else if (list.Count == 1)
+            else if (list?.Count == 1)
             {
                 MessageBox.Show($"Курс запрошен только на 1 дату, курс = {list[0].Value}","Курс",MessageBoxButton.OK,MessageBoxImage.Information);
             }
@@ -84,52 +84,19 @@ namespace WpfTest
                 MessageBox.Show($"Нету информации от сервера, или завершон с ошибкой", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-        }
+            button1.IsEnabled = true;
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            SetTimer();
-            requestFromServer.MakeRequest(keyObj);
-        }
-
-        private void SetTimer()
-        {
-            if (timer==null)
-            {
-                timer = new DispatcherTimer();
-                timer.Tick += new EventHandler(timer_Tick);
-                timer.Interval = new TimeSpan(0, 0, 0, 1);
-                button1.IsEnabled = false;
-                timer.Start(); 
-            }
-        }
-
-        private int secondTimer = 0;
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            if (secondTimer < 5)
-            {
-                secondTimer++;
-                button1.Content = $"{5- secondTimer}";
-            }
-            else
-            {
-                MessageBox.Show($"Нету информации от сервера, или завершон с ошибкой", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                timerStop();
-            }
-        }
-
-        private void timerStop()
-        {
-            if (timer!=null)
-            {
-                button1.Content = "Запустить";
-                button1.IsEnabled = true;
-                timer.Stop();
-                timer = null; 
-            }
         }
 
         #endregion
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            button1.IsEnabled = false;
+            requestFromServer.MakeRequest(keyObj);
+        }
+
+
+
+
     }
 }
