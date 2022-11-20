@@ -1,6 +1,6 @@
 ﻿namespace WpfTest
 {
-    public class Setup
+    public class Tuning
     {
         
     }

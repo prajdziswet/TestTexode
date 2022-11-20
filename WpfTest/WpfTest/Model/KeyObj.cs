@@ -20,7 +20,7 @@ namespace WpfTest
         private readonly ObservableCollection<KeyValuePair<string, string>> _CurrencyName = new ObservableCollection<KeyValuePair<string, string>> 
         { new KeyValuePair<string, string>("USD","USD"),
             new KeyValuePair<string, string>("EUR","EUR"),
-            new KeyValuePair<string, string>("RUB","РосRUB"),
+            new KeyValuePair<string, string>("RUB","РоsRUB"),
             new KeyValuePair<string, string>("BTC","BTC")
             };
 
@@ -39,6 +39,7 @@ namespace WpfTest
             set
             {
                 _selectCurrency=value;
+                OnPropertyChanged("SelectCurrency");
             }
         }
 
