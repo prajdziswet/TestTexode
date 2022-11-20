@@ -3,10 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:dvc="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         xmlns:local="clr-namespace:WpfTest"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="900">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="43*"/>
+            <ColumnDefinition Width="857*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DatePicker x:Name="datePricker1" SelectedDate="{Binding Path=dateStart}" HorizontalAlignment="Right" Margin="0,0,400,0" VerticalAlignment="Center" Width="150" Grid.Column="1" Height="24"/>
+        <DatePicker x:Name="datePicker2" SelectedDate="{Binding Path=dateFinish}" HorizontalAlignment="Right" Margin="0,0,250,0" VerticalAlignment="Center" Width="150" Grid.Column="1" Height="24"/>
+        <ComboBox x:Name="comboBox1" ItemsSource="{Binding CurrencyName}" SelectedItem="{Binding SelectCurrency}" SelectedValue="{Binding SelectCurrency}" SelectedValuePath="Key" DisplayMemberPath="Value" HorizontalAlignment="Right" Margin="0,0,120,0" VerticalAlignment="Center" Width="120" Grid.Column="1" Height="22">
 
+
+        </ComboBox>
+        <Button Content="Запросить" HorizontalAlignment="Right" Margin="0,0,40,0" VerticalAlignment="Center" Width="65" Grid.Column="1" Click="Button_Click" Height="20"/>
+        <WindowsFormsHost Grid.Row="1" Grid.ColumnSpan="2" Loaded="WindowsFormsHost_Loaded">
+            <dvc:Chart x:Name="chart" />
+        </WindowsFormsHost>
     </Grid>
 </Window>
