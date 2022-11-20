@@ -43,6 +43,12 @@ namespace WpfTest
             }
         }
 
+        private DateTime Check(DateTime date)
+        {
+            if (date>DateTime.Now&&date<new DateTime(1991,1,1)) return DateTime.Now;
+            return date;
+        }
+
         private DateTime _dateStart;
 
         public DateTime dateStart
@@ -50,7 +56,7 @@ namespace WpfTest
             get => _dateStart;
             set
             {
-                _dateStart= value;
+                _dateStart= Check(value);
                 OnPropertyChanged("dateStart");
             }
         }
