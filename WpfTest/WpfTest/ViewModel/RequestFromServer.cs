@@ -32,7 +32,6 @@ namespace WpfTest
         public static _ReturnRezult ReturnRezult;
 
         private Task task;
-        private bool taskCompled = false;
 
         private async Task GetListCurrency(KeyObj key, CancellationToken token)
         {
@@ -47,7 +46,6 @@ namespace WpfTest
                     }
                 }
 
-                taskCompled = true;
             }
             catch (System.Exception)
             {
@@ -77,14 +75,14 @@ namespace WpfTest
 
         public void MakeRequest(KeyObj key)
         {
-            if (task == null||taskCompled)
+            if (task != null)
             {
+                task.Dispose();
+            }
                 s_cts = new CancellationTokenSource();
-                taskCompled = false;
                 listCurrency = null;
                 task = new Task(() => StartTask(key));
                 task.Start(); 
-            }
         }
 
         public static void Dispose()

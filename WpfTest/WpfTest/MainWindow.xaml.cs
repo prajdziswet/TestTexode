@@ -45,13 +45,15 @@ namespace WpfTest
 
         private void DrawGrafic()
         {
-            chart.ChartAreas.Clear();
+            button1.IsEnabled = true;
+           
             List<MyCurrency> list = requestFromServer.listCurrency;
 
             if (list?.Count > 1)
             {
                 list = list.OrderBy(x => x.Date).ToList();
                 //Все графики находятся в пределах области построения ChartArea, создадим ее
+                chart.ChartAreas.Clear();
                 chart.ChartAreas.Add(new ChartArea("Default"));
                 chart.ChartAreas[0].AxisX.Title = "Дата";
                 chart.ChartAreas[0].AxisX.Minimum = 1;
@@ -65,6 +67,7 @@ namespace WpfTest
 
 
                 // Добавим линию, и назначим ее в ранее созданную область "Default"
+                chart.Series.Clear();
                 chart.Series.Add(new Series("Series1"));
                 chart.Series["Series1"].ChartArea = "Default";
                 chart.Series["Series1"].ChartType = SeriesChartType.Line;
@@ -83,8 +86,6 @@ namespace WpfTest
             {
                 MessageBox.Show($"Нету информации от сервера, или завершон с ошибкой", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            button1.IsEnabled = true;
 
         }
 
